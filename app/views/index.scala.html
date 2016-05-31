@@ -1,0 +1,13 @@
+@(user: Form[CreateUserForm])(implicit messages: Messages)
+
+@import helper._
+
+@main("Yo!") {
+    @form(routes.Application.addUser()) {
+        @inputText(user("name"))
+
+        <div class="buttons">
+            <input type="submit" value="Save">
+        </div>
+    }
+}
