@@ -1,8 +1,21 @@
-@(user: Form[CreateUserForm])(implicit messages: Messages)
+@(user: Form[CreateUserForm])(implicit messages: Messages, flash: play.api.mvc.Flash)
 
 @import helper._
 
 @main("Yo!") {
+
+    @flash.get("success").map { message =>
+        <div class="alert-message warning">
+            <strong>Done!</strong> @message
+        </div>
+    }
+
+    <div>
+        <ul id="users_container">
+
+        </ul>
+    </div>
+
     @form(routes.Application.addUser()) {
         @inputText(user("name"))
 

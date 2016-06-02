@@ -20,10 +20,14 @@ class UserRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
     private val users = TableQuery[Users]
 
     def add(name: String): Future[User] = db.run {
-        (users.map(user => (user.name))
+        (users.map(user => user.name)
             returning users.map(_.id)
             into((nameU, id) => User(id, nameU))
-        ) += (name)
+        ) += name
+    }
+
+    def delete(id: Int): Future[Int] = db.run {
+        this.findById(id).delete
     }
 
     /**
@@ -31,5 +35,10 @@ class UserRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
       */
     def list(): Future[Seq[User]] = db.run {
         users.result
+    }
+
+    def findById(id: Int) = {
+        //for ( user <- users if user.id === id ) yield user
+        users.filter(_.id === id)
     }
 }
