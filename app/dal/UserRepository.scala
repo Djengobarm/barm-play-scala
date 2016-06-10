@@ -30,6 +30,10 @@ class UserRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
         this.findById(id).delete
     }
 
+    def exists(id: Int): Future[Boolean] = db.run {
+        users.filter( i => i.id === id ).exists.result
+    }
+
     /**
       * List all the users in the database.
       */

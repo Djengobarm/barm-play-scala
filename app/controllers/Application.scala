@@ -48,21 +48,33 @@ class Application @Inject() (userRepo: UserRepository, val messagesApi: Messages
   }
 
   def deleteUser(id: Int) = Action.async { implicit request =>
-    // get future delete
-    val futureDel = userRepo.delete(id)
 
-    val successMessage = "User #" + id.toString + " have been deleted"
+      val futureExists = userRepo.exists(id)
 
-    // Redirect to home page with Success flash message
-    futureDel.map { result => Home.flashing("success" -> successMessage) }.recover {
-      // if anything goes wrong
-      case ex: TimeoutException =>
-        Logger("User #" + id.toString + " can not be deleted. " + ex.getMessage)
-        InternalServerError(ex.getMessage)
-      case ex: SQLException =>
-        Logger("User #" + id.toString + " can not be deleted. " + ex.getMessage)
-        InternalServerError(ex.getMessage)
-    }
+      futureExists.map { result => {
+        if ( result ) {
+          userRepo.delete(id)
+          Ok("success")
+          // get future delete
+//          val futureDel = userRepo.delete(id)
+//
+//          val successMessage = "User #" + id.toString + " have been deleted"
+//
+//          // Redirect to home page with Success flash message
+//          futureDel.map { res => Home.flashing("success" -> successMessage) }.recover {
+//            // if anything goes wrong
+//            case ex: TimeoutException =>
+//              Logger("User #" + id.toString + " can not be deleted. " + ex.getMessage)
+//              InternalServerError(ex.getMessage)
+//            case ex: SQLException =>
+//              Logger("User #" + id.toString + " can not be deleted. " + ex.getMessage)
+//              InternalServerError(ex.getMessage)
+//          }
+        } else {
+//          throw new Exception("sdfsdfsdf")
+          Ok("not success")
+        }
+      }}
   }
 
 }
