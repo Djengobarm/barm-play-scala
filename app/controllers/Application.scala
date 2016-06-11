@@ -1,6 +1,7 @@
 package controllers
 
 import java.sql.SQLException
+import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 import dal.UserRepository
@@ -68,7 +69,17 @@ class Application @Inject() (userRepo: UserRepository, val messagesApi: Messages
                 val notFoundMessage = "User #" + id.toString + " was not found"
                 Home.flashing("warning" -> notFoundMessage)
             }
-        }}
+        }}.recover {
+            // if anything goes wrong
+            case e: TimeoutException => {
+                Logger("User #" + id.toString + " can not be deleted. " + e.getMessage)
+                Home.flashing("error" -> e.getMessage)
+            }
+            case e: SQLException => {
+                Logger("User #" + id.toString + " can not be deleted. " + e.getMessage)
+                Home.flashing("error" -> e.getMessage)
+            }
+        }
     }
 
 }
