@@ -1,7 +1,6 @@
 package controllers
 
 import java.sql.SQLException
-import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 import dal.UserRepository
@@ -53,26 +52,21 @@ class Application @Inject() (userRepo: UserRepository, val messagesApi: Messages
 
         futureExists.map { result => {
             if ( result ) {
-                userRepo.delete(id)
-                Ok("success")
-                // get future delete
-                //          val futureDel = userRepo.delete(id)
-                //
-                //          val successMessage = "User #" + id.toString + " have been deleted"
-                //
-                //          // Redirect to home page with Success flash message
-                //          futureDel.map { res => Home.flashing("success" -> successMessage) }.recover {
-                //            // if anything goes wrong
-                //            case ex: TimeoutException =>
-                //              Logger("User #" + id.toString + " can not be deleted. " + ex.getMessage)
-                //              InternalServerError(ex.getMessage)
-                //            case ex: SQLException =>
-                //              Logger("User #" + id.toString + " can not be deleted. " + ex.getMessage)
-                //              InternalServerError(ex.getMessage)
-                //          }
+                try {
+                    userRepo.delete(id)
+                    val successMessage = "User #" + id.toString + " have been deleted"
+                    Home.flashing("success" -> successMessage)
+                } catch {
+                    case e: SQLException => {
+                        Home.flashing("error" -> e.getMessage)
+                    }
+                    case e: Exception => {
+                        Home.flashing("error" -> e.getMessage)
+                    }
+                }
             } else {
-                //          throw new Exception("sdfsdfsdf")
-                Ok("not success")
+                val notFoundMessage = "User #" + id.toString + " was not found"
+                Home.flashing("warning" -> notFoundMessage)
             }
         }}
     }
