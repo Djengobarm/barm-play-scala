@@ -19,8 +19,8 @@ class UserRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
 
     private val users = TableQuery[Users]
 
-    def add(name: String): Future[User] = db.run {
-        (users.map(user => user.name)
+    def add(name: String, email: String, password: String): Future[User] = db.run {
+        (users.map(user => (user.name, user.email, user.password))
             returning users.map(_.id)
             into((nameU, id) => User(id, nameU))
         ) += name

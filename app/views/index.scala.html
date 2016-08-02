@@ -4,24 +4,6 @@
 
 @main("Yo!") {
 
-    @flash.get("error").map { message =>
-        <div class="alert alert-danger">
-            <strong>Error!</strong> @message
-        </div>
-    }
-
-    @flash.get("warning").map { message =>
-        <div class="alert alert-warning">
-            <strong>Warning!</strong> @message
-        </div>
-    }
-
-    @flash.get("success").map { message =>
-        <div class="alert alert-success">
-            <strong>Done!</strong> @message
-        </div>
-    }
-
     <div>
         <ul id="users_container">
 

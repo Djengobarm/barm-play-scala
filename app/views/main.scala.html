@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String)(content: Html)(implicit messages: Messages, flash: play.api.mvc.Flash)
 
 <!DOCTYPE html>
 
@@ -11,6 +11,25 @@
         <script src="@routes.Assets.at("javascripts/main.js")"></script>
     </head>
     <body>
+
+        @flash.get("error").map { message =>
+            <div class="alert alert-danger">
+                <strong>Error!</strong> @message
+            </div>
+        }
+
+        @flash.get("warning").map { message =>
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> @message
+            </div>
+        }
+
+        @flash.get("success").map { message =>
+            <div class="alert alert-success">
+                <strong>Done!</strong> @message
+            </div>
+        }
+
         @content
     </body>
 </html>

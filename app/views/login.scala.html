@@ -1,0 +1,15 @@
+@(user: Form[CreateLoginForm])(implicit messages: Messages, flash: play.api.mvc.Flash)
+
+@import helper._
+
+@main("Login") {
+
+    @form(routes.Auth.login()) {
+        @inputText(user("Email"))
+        @inputPassword(user("Password"))
+        <div class="buttons">
+            <a href="@routes.Auth.register">Registration</a>
+            <input type="submit" value="Sign In">
+        </div>
+    }
+}

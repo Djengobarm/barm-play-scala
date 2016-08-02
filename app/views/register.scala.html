@@ -1,0 +1,15 @@
+@(user: Form[CreateRegisterForm])(implicit messages: Messages, flash: play.api.mvc.Flash)
+
+@import helper._
+
+@main("Sign Up") {
+
+    @form(action = routes.Auth.register(), args = 'method -> "POST") {
+        @inputText(user("Name"))
+        @inputText(user("Email"))
+        @inputPassword(user("Password"))
+        <div class="buttons">
+            <input type="submit" value="Sign Up">
+        </div>
+    }
+}

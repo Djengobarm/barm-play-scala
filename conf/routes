@@ -7,6 +7,11 @@ GET     /                           controllers.Application.index
 
 GET     /users                      controllers.Application.getUsers
 
+GET     /login                      controllers.Auth.login
+GET     /register                   controllers.Auth.register
+#POST    /login                      controllers.Auth.doLogin
+POST    /register                   controllers.Auth.doRegister
+
 POST    /user                       controllers.Application.addUser
 
 GET    /user/:id/delete            controllers.Application.deleteUser(id: Int)
